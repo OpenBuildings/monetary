@@ -1,0 +1,21 @@
+--- 
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+
+#whitelist
+branches:
+  only:
+    - master
+    - /^feature-.*$/
+
+script: vendor/bin/phpunit --no-configuration --bootstrap tests/bootstrap.php --coverage-clover build/logs/clover.xml tests/tests
+
+before_script:
+  - mkdir -p build/logs
+  - composer require --dev satooshi/php-coveralls:0.6.*
+
+after_script: php vendor/bin/coveralls -v
