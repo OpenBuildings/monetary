@@ -12,27 +12,30 @@ namespace OpenBuildings\Monetary;
  */
 abstract class Source_Remote extends Source implements Source_Cacheable {
 
-	const NAME = 'remote';
-	
 	const USER_AGENT = 'OpenBuildings Monetary';
 
 	const CACHE_KEY = 'openbuildings-monetary-remote';
 
 	const DEFAULT_CACHE = 'OpenBuildings\Monetary\Cache';
 
+	const DEFAULT_REQUEST_DRIVER = 'OpenBuildings\Monetary\CURL';
+
+	protected $_request_driver;
+
 	/**
 	 * @var OpenBuildings\Monetary\Cacheable
 	 */
 	protected $_cache;
 
-	public function __construct(Cacheable $cache = NULL)
+	public function __construct(Cacheable $cache = NULL, Requestable $request_driver = NULL)
 	{
 		$this->cache($cache);
+		$this->request_driver($request_driver);
 	}
 
 	/**
-	 * Get an instance of the cache helper
-	 * @return Desarrolla2\Cache\Cache
+	 * Get an instance of the cache driver
+	 * @return OpenBuildings\Monetary\Cacheable
 	 */
 	public function cache(Cacheable $cache = NULL)
 	{
@@ -46,6 +49,26 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 			return $this->_cache;
 
 		$this->_cache = $cache;
+
+		return $this;
+	}
+
+	/**
+	 * Get an instance of the request driver
+	 * @return OpenBuildings\Monetary\Requestable
+	 */
+	public function request_driver(Requestable $request_driver = NULL)
+	{
+		if ( ! $this->_request_driver AND ! $request_driver)
+		{
+			$default_request_driver = static::DEFAULT_REQUEST_DRIVER;
+			$this->_request_driver = new $default_request_driver;
+		}
+
+		if ( ! $request_driver)
+			return $this->_request_driver;
+
+		$this->_request_driver = $request_driver;
 
 		return $this;
 	}
@@ -85,59 +108,26 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	/**
 	 * Perform a cURL request 
 	 * @param  string $url          API endpoint
-	 * @param  array $post_data     POST data
-	 * @param  array $headers       HTTP headers
 	 * @param  array $curl_options  cURL options
 	 * @return string               raw response
-	 * @throws Exception_Source If the remote returns an error.
+	 * @uses OpenBuildings\Monetary\CURL::request for the actual cURL request
 	 */
-	protected function _request($url, array $post_data = NULL, array $headers = NULL, array $curl_options = NULL)
+	protected function _request($url, array $curl_options = NULL)
 	{
-		// Create a new curl instance
-		$curl = curl_init($url);
+		$options = array(CURLOPT_URL => $url);
 
-		$options = array(
-			CURLOPT_SSL_VERIFYPEER => FALSE,
-			CURLOPT_SSL_VERIFYHOST => FALSE,
-			CURLOPT_RETURNTRANSFER => TRUE,
-			CURLOPT_FOLLOWLOCATION => TRUE,
-			CURLOPT_MAXREDIRS      => 10
-		);
+		$curl_options = (array) $curl_options;
 
-		if ($post_data)
-		{
-			$options[CURLOPT_POSTFIELDS] = http_build_query($post_data, NULL, '&');
-			$options[CURLOPT_POST] = TRUE;
-		}
+		$headers = empty($curl_options[CURLOPT_HTTPHEADER])
+			? array()
+			: $curl_options[CURLOPT_HTTPHEADER];
 
-		$headers = (array) $headers;
+		unset($curl_options[CURLOPT_HTTPHEADER]);
 
 		$headers []= 'User-Agent: '.static::USER_AGENT;
 
 		$options[CURLOPT_HTTPHEADER] = $headers;
 
-		// Set curl options
-		curl_setopt_array($curl, array_merge($options, (array) $curl_options));
-
-		// Execute response
-		if (($response_string = curl_exec($curl)) === FALSE)
-		{
-			// Get the error code and message
-			$code  = curl_errno($curl);
-			$error = curl_error($curl);
-
-			// Close curl
-			curl_close($curl);
-
-			throw new Exception_Source('Fetching :source_name data failed! :error (:code)', static::NAME, array(
-				':error' => $error,
-				':code' => $code
-			));
-		}
-
-		// Close curl
-		curl_close($curl);
-
-		return $response_string;
+		return $this->request_driver()->request($options + $curl_options);
 	}
 }

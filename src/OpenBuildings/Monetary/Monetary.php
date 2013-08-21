@@ -28,7 +28,7 @@ class Monetary {
 	{
 		if (empty(self::$_instances[$group]))
 		{
-			self::$_instances[$group] = new self;
+			self::$_instances[$group] = new static;
 		}
 
 		return self::$_instances[$group];

@@ -33,8 +33,10 @@ class Cache implements Cacheable {
 	{
 		if ( ! $this->_cache)
 		{
-			$adapter = new DCache_Adapter\File(realpath(__DIR__.'../../../'.self::CACHE_DIR));
-			$adapter->setOption('ttl', self::CACHE_LIFETIME);
+			$adapter = new DCache_Adapter\File(
+				realpath(__DIR__.'../../../'.static::CACHE_DIR)
+			);
+			$adapter->setOption('ttl', static::CACHE_LIFETIME);
 			$this->_cache = new DCache\Cache($adapter);
 		}
 

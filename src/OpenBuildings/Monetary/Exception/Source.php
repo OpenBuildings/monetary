@@ -11,7 +11,7 @@ class Exception_Source extends Exception {
 
 	public $source_name;
 
-	public function __construct($message, $source_name, $variables = array())
+	public function __construct($message, $source_name = 'remote', $variables = array())
 	{
 		$this->source_name = $variables[':source_name'] = $source_name;
 
