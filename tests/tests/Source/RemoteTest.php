@@ -10,7 +10,7 @@ use OpenBuildings\Monetary as M;
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-class Source_RemoteTest extends Monetary_TestCase {
+class Source_RemoteTest extends TestCase {
 
 	/**
 	 * @covers OpenBuildings\Monetary\Source_Remote::__construct
@@ -52,6 +52,36 @@ class Source_RemoteTest extends Monetary_TestCase {
 		);
 
 		$this->assertSame($mock_cache, $remote->cache());
+	}
+
+	/**
+	 * @covers OpenBuildings\Monetary\Source_Remote::request_driver
+	 */
+	public function test_request_driver()
+	{
+		$remote = new M\Source_ECB;
+
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\Requestable',
+			$remote->request_driver()
+		);
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\CURL',
+			$remote->request_driver()
+		);
+
+		$mock_request_driver = $this->getMock('OpenBuildings\Monetary\CURL');
+		$remote->request_driver($mock_request_driver);
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\Requestable',
+			$remote->request_driver()
+		);
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\CURL',
+			$remote->request_driver()
+		);
+
+		$this->assertSame($mock_request_driver, $remote->request_driver());
 	}
 
 	/**
@@ -165,7 +195,72 @@ class Source_RemoteTest extends Monetary_TestCase {
 	 */
 	public function test_request()
 	{
-		$this->markTestIncomplete();
+		$cache_mock = $this->getMock('OpenBuildings\Monetary\Cache', array(
+			'read_cache',
+			'write_cache'
+		));
+
+		$cache_mock
+			->expects($this->any())
+			->method('read_cache')
+			->will($this->returnValue(FALSE));
+
+		$cache_mock
+			->expects($this->any())
+			->method('write_cache');
+
+		$request_mock = $this->getMock('OpenBuildings\Monetary\CURL', array(
+			'request'
+		));
+
+		$request_mock
+			->expects($this->once())
+			->method('request')
+			->with($this->equalTo(array(
+				CURLOPT_URL => M\Source_ECB::API_URL,
+				CURLOPT_HTTPHEADER => array(
+					'User-Agent: '.M\Source_ECB::USER_AGENT
+				)
+			)))
+			->will($this->returnValue(self::ECB_XML_DATA));
+
+		$remote = new M\Source_ECB($cache_mock, $request_mock);
+		$exchange_rates = $remote->exchange_rates();
+		$this->assertSame(array(
+			'USD',
+			'JPY',
+			'BGN',
+			'CZK',
+			'DKK',
+			'GBP',
+			'HUF',
+			'LTL',
+			'LVL',
+			'PLN',
+			'RON',
+			'SEK',
+			'CHF',
+			'NOK',
+			'HRK',
+			'RUB',
+			'TRY',
+			'AUD',
+			'BRL',
+			'CAD',
+			'CNY',
+			'HKD',
+			'IDR',
+			'ILS',
+			'INR',
+			'KRW',
+			'MXN',
+			'MYR',
+			'NZD',
+			'PHP',
+			'SGD',
+			'THB',
+			'ZAR',
+		), array_keys($exchange_rates));
 	}
 
 }
