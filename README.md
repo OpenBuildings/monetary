@@ -17,3 +17,23 @@ Install via [Composer](http://getcomposer.org)
 ``` bash
 composer require openbuildings/monetary
 ```
+
+Usage
+-----
+
+Use the namespace:
+
+``` php
+use OpenBuildings\Monetary\Monetary;
+```
+
+then just convert and format currencies:
+
+``` php
+echo Monetary::convert(10, 'USD', 'GBP');
+// 7.5091987684914
+
+echo Monetary::format(15.3, 'GBP');
+// £15.30
+```
+
