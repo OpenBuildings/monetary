@@ -47,7 +47,46 @@ class Source_RemoteTest extends Monetary_TestCase {
 	 */
 	public function test_exchange_rates()
 	{
-		$this->markTestIncomplete();
+		$cache_mock = $this->getMock('OpenBuildings\Monetary\Cache', array('read_cache', 'write_cache'));
+		
+		$cache_mock
+			->expects($this->at(0))
+			->method('read_cache')
+			->with($this->equalTo(M\Source_ECB::CACHE_KEY))
+			->will($this->returnValue(FALSE));
+
+		$cache_mock
+			->expects($this->any())
+			->method('read_cache')
+			->with($this->equalTo(M\Source_ECB::CACHE_KEY))
+			->will($this->returnValue('ABCDE'));
+
+		$cache_mock
+			->expects($this->once())
+			->method('write_cache')
+			->with($this->equalTo(M\Source_ECB::CACHE_KEY), $this->equalTo('ABCDE'));
+
+		$remote = $this->getMock('OpenBuildings\Monetary\Source_ECB', array('_converted_exchange_rates'));
+
+		$remote
+			->expects($this->any())
+			->method('_converted_exchange_rates')
+			->will($this->returnValue('ABCDE'));
+
+		$remote->cache($cache_mock);
+
+		$exchange_rates = $remote->exchange_rates();
+		$this->assertSame('ABCDE', $exchange_rates);
+
+		$remote = $this->getMock('OpenBuildings\Monetary\Source_ECB', array('_converted_exchange_rates'));
+
+		$remote
+			->expects($this->exactly(0))
+			->method('_converted_exchange_rates');
+
+		$remote->cache($cache_mock);
+		$exchange_rates = $remote->exchange_rates();
+		$this->assertSame('ABCDE', $exchange_rates);
 	}
 
 	/**

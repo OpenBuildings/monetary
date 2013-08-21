@@ -65,7 +65,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 
 	protected function _exchange_rates()
 	{
-		if ( ! $exchange_rates = $this->cache()->read_cache(static::CACHE_KEY))
+		if ( ! ($exchange_rates = $this->cache()->read_cache(static::CACHE_KEY)))
 		{
 			$exchange_rates = $this->_converted_exchange_rates();
 			$this->cache()->write_cache(static::CACHE_KEY, $exchange_rates);
