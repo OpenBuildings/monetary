@@ -38,7 +38,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	{
 		if ( ! $this->_cache AND ! $cache)
 		{
-			$default_cache = self::DEFAULT_CACHE;
+			$default_cache = static::DEFAULT_CACHE;
 			$this->_cache = new $default_cache;
 		}
 
@@ -65,10 +65,10 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 
 	protected function _exchange_rates()
 	{
-		if ( ! $exchange_rates = $this->cache()->read_cache(self::CACHE_KEY))
+		if ( ! $exchange_rates = $this->cache()->read_cache(static::CACHE_KEY))
 		{
 			$exchange_rates = $this->_converted_exchange_rates();
-			$this->cache()->write_cache(self::CACHE_KEY, $exchange_rates);
+			$this->cache()->write_cache(static::CACHE_KEY, $exchange_rates);
 		}
 
 		return $exchange_rates;
@@ -112,7 +112,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 
 		$headers = (array) $headers;
 
-		$headers []= 'User-Agent: '.self::USER_AGENT;
+		$headers []= 'User-Agent: '.static::USER_AGENT;
 
 		$options[CURLOPT_HTTPHEADER] = $headers;
 
@@ -129,7 +129,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 			// Close curl
 			curl_close($curl);
 
-			throw new Exception_Source('Fetching :source_name data failed! :error (:code)', self::NAME, array(
+			throw new Exception_Source('Fetching :source_name data failed! :error (:code)', static::NAME, array(
 				':error' => $error,
 				':code' => $code
 			));

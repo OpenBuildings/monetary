@@ -83,7 +83,7 @@ class Monetary {
 	{
 		if ( ! $this->_source AND ! $source)
 		{
-			$default_source = self::DEFAULT_SOURCE;
+			$default_source = static::DEFAULT_SOURCE;
 			$this->_source = new $default_source;
 		}
 
