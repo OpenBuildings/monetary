@@ -13,6 +13,6 @@
 	<logging>
 		<log type="coverage-html" target="build/coverage" charset="UTF-8"
 		 logIncompleteSkipped="false" highlight="true"
-		 lowUpperBound="70" highLowerBound="90" showUncoveredFiles="true"/>
+		 lowUpperBound="80" highLowerBound="90" showUncoveredFiles="true"/>
 	</logging>
 </phpunit>
