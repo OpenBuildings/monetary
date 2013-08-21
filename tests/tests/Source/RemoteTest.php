@@ -31,13 +31,25 @@ class Source_RemoteTest extends Monetary_TestCase {
 	{
 		$remote = new M\Source_ECB;
 
-		$this->assertInstanceOf('OpenBuildings\Monetary\Cacheable', $remote->cache());
-		$this->assertInstanceOf('OpenBuildings\Monetary\Cache', $remote->cache());
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\Cacheable',
+			$remote->cache()
+		);
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\Cache',
+			$remote->cache()
+		);
 
 		$mock_cache = $this->getMock('OpenBuildings\Monetary\Cache');
 		$remote->cache($mock_cache);
-		$this->assertInstanceOf('OpenBuildings\Monetary\Cacheable', $remote->cache());
-		$this->assertInstanceOf('OpenBuildings\Monetary\Cache', $remote->cache());
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\Cacheable',
+			$remote->cache()
+		);
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\Cache',
+			$remote->cache()
+		);
 
 		$this->assertSame($mock_cache, $remote->cache());
 	}
@@ -47,7 +59,10 @@ class Source_RemoteTest extends Monetary_TestCase {
 	 */
 	public function test_exchange_rates()
 	{
-		$cache_mock = $this->getMock('OpenBuildings\Monetary\Cache', array('read_cache', 'write_cache'));
+		$cache_mock = $this->getMock('OpenBuildings\Monetary\Cache', array(
+			'read_cache',
+			'write_cache'
+		));
 		
 		$cache_mock
 			->expects($this->at(0))
@@ -64,9 +79,14 @@ class Source_RemoteTest extends Monetary_TestCase {
 		$cache_mock
 			->expects($this->once())
 			->method('write_cache')
-			->with($this->equalTo(M\Source_ECB::CACHE_KEY), $this->equalTo('ABCDE'));
+			->with(
+				$this->equalTo(M\Source_ECB::CACHE_KEY),
+				$this->equalTo('ABCDE')
+			);
 
-		$remote = $this->getMock('OpenBuildings\Monetary\Source_ECB', array('_converted_exchange_rates'));
+		$remote = $this->getMock('OpenBuildings\Monetary\Source_ECB', array(
+			'_converted_exchange_rates'
+		));
 
 		$remote
 			->expects($this->any())
@@ -78,7 +98,9 @@ class Source_RemoteTest extends Monetary_TestCase {
 		$exchange_rates = $remote->exchange_rates();
 		$this->assertSame('ABCDE', $exchange_rates);
 
-		$remote = $this->getMock('OpenBuildings\Monetary\Source_ECB', array('_converted_exchange_rates'));
+		$remote = $this->getMock('OpenBuildings\Monetary\Source_ECB', array(
+			'_converted_exchange_rates'
+		));
 
 		$remote
 			->expects($this->exactly(0))
