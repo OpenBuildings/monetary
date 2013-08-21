@@ -7,6 +7,7 @@
 	<filter>
 		<blacklist>
 			<file>tests/bootstrap.php</file>
+			<directory suffix=".php">tests/classes/</directory>
 			<directory suffix=".php">vendor/</directory>
 		</blacklist>
 	</filter>
