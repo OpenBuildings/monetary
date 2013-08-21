@@ -9,6 +9,14 @@ Useful tool for formatting and converting currencies in PHP
 
 ---
 
+The main features are:
+ - formatting an amount in a certain currency;
+ - converting an amount from one currency to another.
+
+The Monetary library takes care of fetching exchange rates from remote services and caching them.
+
+You can easily use your own exchange rates source or cache solution.
+
 Installation
 ------------
 
@@ -18,8 +26,8 @@ Install via [Composer](http://getcomposer.org)
 composer require openbuildings/monetary
 ```
 
-Usage
------
+Basic Usage
+-----------
 
 Use the namespace:
 
