@@ -16,7 +16,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	
 	const USER_AGENT = 'OpenBuildings Monetary';
 
-	const CACHE_KEY = 'openbuildings-monetary';
+	const CACHE_KEY = 'openbuildings-monetary-remote';
 
 	const DEFAULT_CACHE = 'OpenBuildings\Monetary\Cache';
 
