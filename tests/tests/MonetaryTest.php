@@ -47,6 +47,20 @@ class MonetaryTest extends Monetary_TestCase {
 	}
 
 	/**
+	 * @covers OpenBuildings\Monetary\Monetary::precision
+	 */
+	public function test_precision()
+	{
+		$this->assertEquals(2, $this->monetary->precision());
+
+		$this->monetary->precision(3);
+		$this->assertEquals(3, $this->monetary->precision());
+
+		$this->monetary->precision(2);
+		$this->assertEquals(2, $this->monetary->precision());
+	}
+
+	/**
 	 * @covers OpenBuildings\Monetary\Monetary::source
 	 */
 	public function test_source()

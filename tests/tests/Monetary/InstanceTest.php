@@ -39,6 +39,7 @@ class Monetary_InstanceTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @covers OpenBuildings\Monetary\Monetary::instance
+	 * @covers OpenBuildings\Monetary\Monetary::default_currency
 	 */
 	public function test_same_instance_with_currency()
 	{

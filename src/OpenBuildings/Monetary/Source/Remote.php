@@ -54,7 +54,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 
 			if ( ! $cache)
 				return $this->_cache;
-		}
+		} // @codeCoverageIgnore
 
 		$this->_cache = $cache;
 
@@ -77,7 +77,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 
 			if ( ! $request_driver)
 				return $this->_request_driver;
-		}
+		} // @codeCoverageIgnore
 
 		$this->_request_driver = $request_driver;
 

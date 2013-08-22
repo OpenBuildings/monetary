@@ -91,7 +91,7 @@ class Monetary {
 	
 			if ( ! $source)
 				return $this->_source;
-		}
+		} // @codeCoverageIgnore
 
 		$this->_source = $source;
 		
@@ -114,7 +114,7 @@ class Monetary {
 
 			if ( ! $precision)
 				return $this->_precision;
-		}
+		} // @codeCoverageIgnore
 
 		$this->_precision = $precision;
 
@@ -146,7 +146,7 @@ class Monetary {
 
 			if ( ! $default_currency)
 				return $this->_default_currency;
-		}
+		} // @codeCoverageIgnore
 
 		$this->_default_currency = $default_currency;
 
