@@ -27,6 +27,11 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	 */
 	protected $_cache;
 
+	/**
+	 * Build a remote source with optional cache and request drivers
+	 * @param Cacheable $cache cache driver
+	 * @param Requestable $request_driver request driver
+	 */
 	public function __construct(Cacheable $cache = NULL, Requestable $request_driver = NULL)
 	{
 		$this->cache($cache);
@@ -39,14 +44,17 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	 */
 	public function cache(Cacheable $cache = NULL)
 	{
-		if ( ! $this->_cache AND ! $cache)
-		{
-			$default_cache = static::DEFAULT_CACHE;
-			$this->_cache = new $default_cache;
-		}
-
 		if ( ! $cache)
-			return $this->_cache;
+		{
+			if ( ! $this->_cache)
+			{
+				$default_cache = static::DEFAULT_CACHE;
+				$this->_cache = new $default_cache;
+			}
+
+			if ( ! $cache)
+				return $this->_cache;
+		}
 
 		$this->_cache = $cache;
 
@@ -59,14 +67,17 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	 */
 	public function request_driver(Requestable $request_driver = NULL)
 	{
-		if ( ! $this->_request_driver AND ! $request_driver)
-		{
-			$default_request_driver = static::DEFAULT_REQUEST_DRIVER;
-			$this->_request_driver = new $default_request_driver;
-		}
-
 		if ( ! $request_driver)
-			return $this->_request_driver;
+		{
+			if ( ! $this->_request_driver)
+			{
+				$default_request_driver = static::DEFAULT_REQUEST_DRIVER;
+				$this->_request_driver = new $default_request_driver;
+			}
+
+			if ( ! $request_driver)
+				return $this->_request_driver;
+		}
 
 		$this->_request_driver = $request_driver;
 

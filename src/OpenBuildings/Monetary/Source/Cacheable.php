@@ -10,5 +10,10 @@ namespace OpenBuildings\Monetary;
  */
 interface Source_Cacheable {
 
+	/**
+	 * Get or set the cache driver for the source
+	 * @param  Cacheable $cache cache driver
+	 * @return Cacheable|$this Cacheable when getting; $this when setting
+	 */
 	public function cache(Cacheable $cache = NULL);
 }

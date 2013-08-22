@@ -65,7 +65,7 @@ class Monetary {
 	 */
 	protected $_precision;
 
-	public function __construct($default_currency = self::DEFAULT_CURRENCY, Sourceable $source = NULL, $precision = self::DEFAULT_PRECISION)
+	public function __construct($default_currency = NULL, Sourceable $source = NULL, $precision = NULL)
 	{
 		$this->default_currency($default_currency);
 		$this->source($source);
@@ -81,14 +81,17 @@ class Monetary {
 	 */
 	public function source(Sourceable $source = NULL)
 	{
-		if ( ! $this->_source AND ! $source)
-		{
-			$default_source = static::DEFAULT_SOURCE;
-			$this->_source = new $default_source;
-		}
-
 		if ( ! $source)
-			return $this->_source;
+		{
+			if ( ! $this->_source)
+			{
+				$default_source = static::DEFAULT_SOURCE;
+				$this->_source = new $default_source;
+			}
+	
+			if ( ! $source)
+				return $this->_source;
+		}
 
 		$this->_source = $source;
 		
@@ -103,7 +106,15 @@ class Monetary {
 	public function precision($precision = NULL)
 	{
 		if ( ! $precision)
-			return $this->_precision;
+		{
+			if ( ! $this->_precision)
+			{
+				$this->_precision = static::DEFAULT_PRECISION;
+			}
+
+			if ( ! $precision)
+				return $this->_precision;
+		}
 
 		$this->_precision = $precision;
 
@@ -127,7 +138,15 @@ class Monetary {
 	public function default_currency($default_currency = NULL)
 	{
 		if ( ! $default_currency)
-			return $this->_default_currency;
+		{
+			if ( ! $this->_default_currency)
+			{
+				$this->_default_currency = static::DEFAULT_CURRENCY;
+			}
+
+			if ( ! $default_currency)
+				return $this->_default_currency;
+		}
 
 		$this->_default_currency = $default_currency;
 

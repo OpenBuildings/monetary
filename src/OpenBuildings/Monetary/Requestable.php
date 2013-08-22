@@ -9,6 +9,11 @@ namespace OpenBuildings\Monetary;
  */
 interface Requestable {
 
+	/**
+	 * Perform a request to remote a service
+	 * @param  array  $options options for the request (e.g. cURL options)
+	 * @return string response
+	 */
 	public function request(array $options);
 
 }
