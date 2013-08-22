@@ -28,5 +28,15 @@ abstract class Source implements Sourceable {
 		return $this->_exchange_rates;
 	}
 
+	public function serialize()
+	{
+		return serialize($this->exchange_rates());
+	}
+
+	public function unserialize($data)
+	{
+		$this->_exchange_rates = unserialize($data);
+	}
+
 	abstract protected function _exchange_rates();
 }

@@ -8,7 +8,7 @@ namespace OpenBuildings\Monetary;
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-interface Sourceable {
+interface Sourceable extends \Serializable {
 
 	/**
 	 * Get exchange rates
