@@ -38,10 +38,10 @@ use OpenBuildings\Monetary\Monetary;
 then just convert and format currencies:
 
 ``` php
-echo Monetary::convert(10, 'USD', 'GBP');
+echo Monetary::instance()->convert(10, 'USD', 'GBP');
 // 7.5091987684914
 
-echo Monetary::format(15.3, 'GBP');
+echo Monetary::instance()->format(15.3, 'GBP');
 // £15.30
 ```
 
