@@ -11,9 +11,10 @@ namespace OpenBuildings\Monetary;
 interface Sourceable extends \Serializable {
 
 	/**
-	 * Get exchange rates
-	 * @return array single-dimension assoc array with currency codes as keys
-	 * and exchange rates as value.
+	 * Get exchange rate between two currencies
+	 * @param string $from the source currency
+	 * @param string $to the target currency
+	 * @return float the exchange rate between the two currencies
 	 */
-	public function exchange_rates();
+	public function rate($from, $to);
 }

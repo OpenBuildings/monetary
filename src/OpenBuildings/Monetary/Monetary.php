@@ -65,10 +65,17 @@ class Monetary {
 	 */
 	protected $_precision;
 
-	public function __construct($default_currency = NULL, Sourceable $source = NULL, $precision = NULL)
+	public function __construct(
+		$default_currency = NULL,
+		Sourceable $source = NULL,
+		$precision = NULL
+	)
 	{
 		$this->default_currency($default_currency);
-		$this->source($source);
+		if ($source)
+		{
+			$this->source($source);
+		}
 		$this->precision($precision);
 	}
 
@@ -119,15 +126,6 @@ class Monetary {
 		$this->_precision = $precision;
 
 		return $this;
-	}
-
-	/**
-	 * Get exchange rates from the source
-	 * @return array
-	 */
-	public function exchange_rates()
-	{
-		return $this->source()->exchange_rates();
 	}
 
 	/**
@@ -184,27 +182,23 @@ class Monetary {
 		if ($from === $to)
 			return 1.00;
 
-		if ( ! ($currency_data = $this->exchange_rates()))
-			return 1.00;
-
-		$from_rate = empty($currency_data[$from]) ? 1 : $currency_data[$from];
-		$to_rate = empty($currency_data[$to]) ? 1 : $currency_data[$to];
-
-		return (float) $to_rate / (float) $from_rate;
+		return $this->source()->rate($from, $to);
 	}
 
 	/**
 	 * Formats an amount into a readable string with a currency sign.
-	 * @param  float  $amount
-	 * @param  string $currency
+	 * @param  float   $amount
+	 * @param  string  $currency
+	 * @param  integer $precision
 	 * @return string formatted amount with a currency sign
 	 * @uses OpenBuildings\Monetary\Monetary::round for rounding the amount
-	 * @uses OpenBuildings\Monetary\Monetary::precision for the rounding precision
+	 * @uses OpenBuildings\Monetary\Monetary::precision for default precision
 	 * @uses OpenBuildings\Monetary\Monetary::currency_template for the template
 	 */
-	public function format($amount, $currency = NULL)
+	public function format($amount, $currency = NULL, $precision = NULL)
 	{
-		$amount = $this->round($amount, $this->precision());
+		$precision = $precision === NULL ? $this->precision() : $precision;
+		$amount = $this->round($amount, $precision);
 
 		$currency = $currency ?: $this->default_currency();
 

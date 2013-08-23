@@ -17,6 +17,17 @@ abstract class Source implements Sourceable {
 	 * @var array
 	 */
 	protected $_exchange_rates;
+
+	public function rate($from, $to)
+	{
+		if ( ! ($currency_data = $this->exchange_rates()))
+			return 1.00;
+
+		$from_rate = empty($currency_data[$from]) ? 1 : $currency_data[$from];
+		$to_rate = empty($currency_data[$to]) ? 1 : $currency_data[$to];
+
+		return (float) $to_rate / (float) $from_rate;
+	}
 	
 	public function exchange_rates()
 	{

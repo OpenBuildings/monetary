@@ -12,14 +12,59 @@ use OpenBuildings\Monetary as M;
  */
 class MonetaryTest extends Monetary_TestCase {
 
+	/**
+	 * @covers OpenBuildings\Monetary\Monetary::__construct
+	 */
+	public function test_constructor_defaults()
+	{
+		$monetary = new M\Monetary;
+		$this->assertEquals(
+			M\Monetary::DEFAULT_CURRENCY,
+			$monetary->default_currency()
+		);
+
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\Source_Ecb',
+			$monetary->source()
+		);
+
+		$this->assertEquals(
+			M\Monetary::DEFAULT_PRECISION,
+			$monetary->precision()
+		);
+	}
+
+	/**
+	 * @covers OpenBuildings\Monetary\Monetary::__construct
+	 */
+	public function test_constructor()
+	{
+		$monetary = new M\Monetary('EUR', new M\Source_Static, 4);
+		$this->assertEquals('EUR',$monetary->default_currency());
+
+		$this->assertInstanceOf(
+			'OpenBuildings\Monetary\Source_Static',
+			$monetary->source()
+		);
+
+		$this->assertEquals(4, $monetary->precision());
+	}
+
 	public function data_format()
 	{
 		return array(
-			array(10,     NULL,  '$10.00'),
-			array(10,     'EUR', '€10.00'),
-			array(5.97,   'GBP', '£5.97'),
-			array(530.05, 'USD', '$530.05'),
-			array(25.00,  'BGN', '25.00 лв'),
+			array(10,     NULL , 2, '$10.00'),
+			array(10,     'EUR', 2, '€10.00'),
+			array(5.97,   'GBP', 2, '£5.97'),
+			array(5.9764, 'GBP', 2, '£5.98'),
+			array(530.05, 'USD', 2, '$530.05'),
+			array(25.00,  'BGN', 2, '25.00 лв'),
+			array(10,     NULL , 3, '$10.000'),
+			array(10,     'EUR', 3, '€10.000'),
+			array(5.97,   'GBP', 3, '£5.970'),
+			array(5.9764, 'GBP', 3, '£5.976'),
+			array(530.05, 'USD', 3, '$530.050'),
+			array(25.00,  'BGN', 3, '25.000 лв'),
 		);
 	}
 
@@ -27,9 +72,9 @@ class MonetaryTest extends Monetary_TestCase {
 	 * @dataProvider data_format
 	 * @covers OpenBuildings\Monetary\Monetary::format
 	 */
-	public function test_format($amount, $currency, $formatted_amount)
+	public function test_format($amount, $currency, $precision, $formatted_amount)
 	{
-		$this->assertEquals($formatted_amount, $this->monetary->format($amount, $currency));
+		$this->assertEquals($formatted_amount, $this->monetary->format($amount, $currency, $precision));
 	}
 
 	/**
@@ -74,22 +119,6 @@ class MonetaryTest extends Monetary_TestCase {
 		$monetary->source($source);
 		$this->assertInstanceOf('OpenBuildings\Monetary\Sourceable', $monetary->source());
 		$this->assertInstanceOf('OpenBuildings\Monetary\Source_Static', $monetary->source());
-	}
-
-	public function test_exchange_rates()
-	{
-		$source_mock = $this->getMock('OpenBuildings\Monetary\Source_Static', array('exchange_rates'));
-
-		$source_mock
-			->expects($this->once())
-			->method('exchange_rates')
-			->will($this->returnValue(array('abc')));
-
-		$this->monetary->source($source_mock);
-
-		$exchange_rates = $this->monetary->exchange_rates();
-
-		$this->assertSame(array('abc'), $exchange_rates);
 	}
 
 	public function data_currency_template()

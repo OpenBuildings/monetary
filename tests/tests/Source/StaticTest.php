@@ -10,7 +10,7 @@ use OpenBuildings\Monetary as M;
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-class Source_StaticTest extends Monetary_TestCase {
+class Source_StaticTest extends TestCase {
 
 
 	/**
@@ -28,7 +28,8 @@ class Source_StaticTest extends Monetary_TestCase {
 	 */
 	public function test_exchange_rates()
 	{
-		$exchange_rates = $this->monetary->exchange_rates();
+		$source = new M\Source_Static;
+		$exchange_rates = $source->exchange_rates();
 		$this->assertArrayHasKey('USD', $exchange_rates);
 		$this->assertArrayHasKey('BGN', $exchange_rates);
 		$this->assertArrayHasKey('GBP', $exchange_rates);

@@ -19,6 +19,142 @@ class SourceTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * @covers OpenBuildings\Monetary\Source::rate
+	 */
+	public function test_rate_without_currency_data()
+	{
+		$source = $this->getMock('OpenBuildings\Monetary\Source_Static', array(
+			'exchange_rates'
+		));
+
+		$source
+			->expects($this->once())
+			->method('exchange_rates')
+			->will($this->returnValue(FALSE));
+
+		$this->assertSame(1.00, $source->rate('ABC', 'XST'));
+	}
+
+	public function data_rate()
+	{
+		return array(
+			array(
+				array(
+					'USD' => '1.5',
+					'GBP' => '0.5'
+				),
+				'GBP',
+				'USD',
+				3.00
+			),
+			array(
+				array(
+					'USD' => '1.5',
+				),
+				'USD',
+				'EUR',
+				0.66666666666667
+			),
+			array(
+				array(
+					'USD' => '1.5',
+				),
+				'EUR',
+				'USD',
+				1.5
+			),
+			array(
+				array(
+					'USD' => '1.5',
+					'EUR' => '2',
+				),
+				'USD',
+				'EUR',
+				1.3333333333333
+			),
+			array(
+				array(
+					'USD' => '1.5',
+					'EUR' => '2',
+				),
+				'EUR',
+				'USD',
+				0.75
+			),
+			array(
+				array(
+					'USD' => '1.5',
+					'GBP' => '0.5',
+					'EUR' => '2.00'
+				),
+				'GBP',
+				'USD',
+				3.00
+			),
+			array(
+				array(
+					'USD' => '1.5',
+					'GBP' => '0.5',
+					'EUR' => '2.00'
+				),
+				'USD',
+				'GBP',
+				0.33333333333333
+			),
+			array(
+				array(
+					'USD' => '1.5',
+					'GBP' => '0.5',
+					'EUR' => '2.00'
+				),
+				'USD',
+				'EUR',
+				1.3333333333333
+			),
+			array(
+				array(
+					'USD' => '1.5',
+					'GBP' => '0.5',
+					'EUR' => '2.00'
+				),
+				'EUR',
+				'USD',
+				0.75
+			),
+			array(
+				array(
+					'USD' => '1.5',
+					'GBP' => '0.5',
+					'EUR' => '2.00'
+				),
+				'EUR',
+				'GBP',
+				0.25
+			),
+			array(
+				array(
+					'USD' => '1.5',
+					'GBP' => '0.5',
+					'EUR' => '2.00'
+				),
+				'GBP',
+				'EUR',
+				4.0
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider data_rate
+	 * @covers OpenBuildings\Monetary\Source::rate
+	 */
+	public function test_rate($currency_data, $from, $to, $expected_rate)
+	{
+		$source = new M\Source_Static($currency_data);
+		$this->assertSame($expected_rate, $source->rate($from, $to));
+	}
+
+	/**
 	 * @covers OpenBuildings\Monetary\Source::exchange_rates
 	 */
 	public function test_exchange_rates()
