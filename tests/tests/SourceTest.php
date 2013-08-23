@@ -153,37 +153,4 @@ class SourceTest extends PHPUnit_Framework_TestCase {
 		$source = new M\Source_Static($currency_data);
 		$this->assertSame($expected_rate, $source->rate($from, $to));
 	}
-
-	/**
-	 * @covers OpenBuildings\Monetary\Source::exchange_rates
-	 */
-	public function test_exchange_rates()
-	{
-		$source_mock = $this->getMock('OpenBuildings\Monetary\Source_Static', array('_exchange_rates'));
-
-		$expected_rates = array('ABC' => '1.25');
-
-		$source_mock
-			->expects($this->once())
-			->method('_exchange_rates')
-			->will($this->returnValue($expected_rates));
-
-		$this->assertSame($expected_rates, $source_mock->exchange_rates());
-		$this->assertSame($expected_rates, $source_mock->exchange_rates());
-	}
-
-	/**
-	 * @covers OpenBuildings\Monetary\Source::serialize
-	 * @covers OpenBuildings\Monetary\Source::unserialize
-	 * @covers OpenBuildings\Monetary\Source_Static::unserialize
-	 */
-	public function test_serialize()
-	{
-		$rates = array('XXX' => '12.5');
-		$source = new M\Source_Static($rates);
-		$unserialized_source = unserialize(serialize($source));
-		$this->assertEquals($source, $unserialized_source);
-		$this->assertSame($rates, $unserialized_source->exchange_rates());
-	}
-
 }

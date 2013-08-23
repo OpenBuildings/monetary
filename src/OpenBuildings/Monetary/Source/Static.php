@@ -61,10 +61,9 @@ class Source_Static extends Source {
 	public function unserialize($data)
 	{
 		$this->_static_exchange_rates = unserialize($data);
-		parent::unserialize($data);
 	}
 	
-	protected function _exchange_rates()
+	public function exchange_rates()
 	{
 		return $this->_static_exchange_rates;
 	}

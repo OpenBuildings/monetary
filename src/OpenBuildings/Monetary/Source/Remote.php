@@ -20,6 +20,15 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 
 	const DEFAULT_REQUEST_DRIVER = 'OpenBuildings\Monetary\CURL';
 
+	/**
+	 * Exchange rates
+	 * @var array
+	 */
+	protected $_exchange_rates;
+
+	/**
+	 * @var OpenBuildings\Monetary\Requestable
+	 */
 	protected $_request_driver;
 
 	/**
@@ -36,6 +45,25 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	{
 		$this->cache($cache);
 		$this->request_driver($request_driver);
+	}
+
+	public function exchange_rates()
+	{
+		if ( ! $this->_exchange_rates AND
+		 ! ($this->_exchange_rates = $this
+		 	->cache()
+		 	->read_cache(static::CACHE_KEY)))
+		{
+			$this->_exchange_rates = $this->_converted_exchange_rates();
+			$this->cache()->write_cache(static::CACHE_KEY, $this->_exchange_rates);
+		}
+
+		return $this->_exchange_rates;
+	}
+
+	public function unserialize($data)
+	{
+		$this->_exchange_rates = unserialize($data);
 	}
 
 	/**
@@ -97,16 +125,6 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	 */
 	abstract public function convert_to_array($raw_data);
 
-	protected function _exchange_rates()
-	{
-		if ( ! ($exchange_rates = $this->cache()->read_cache(static::CACHE_KEY)))
-		{
-			$exchange_rates = $this->_converted_exchange_rates();
-			$this->cache()->write_cache(static::CACHE_KEY, $exchange_rates);
-		}
-
-		return $exchange_rates;
-	}
 
 	protected function _converted_exchange_rates()
 	{

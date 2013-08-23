@@ -85,7 +85,7 @@ class Source_RemoteTest extends TestCase {
 	}
 
 	/**
-	 * @covers OpenBuildings\Monetary\Source_Remote::_exchange_rates
+	 * @covers OpenBuildings\Monetary\Source_Remote::exchange_rates
 	 */
 	public function test_exchange_rates()
 	{
@@ -263,4 +263,23 @@ class Source_RemoteTest extends TestCase {
 		), array_keys($exchange_rates));
 	}
 
+	/**
+	 * @covers OpenBuildings\Monetary\Source::serialize
+	 * @covers OpenBuildings\Monetary\Source_Remote::unserialize
+	 */
+	public function test_serialize()
+	{
+		$rates = array('XXX' => '12.5');
+		$source = $this->getMock('OpenBuildings\Monetary\Source_ECB', array(
+			'_converted_exchange_rates'
+		));
+
+		$source
+			->expects($this->once())
+			->method('_converted_exchange_rates')
+			->will($this->returnValue($rates));
+
+		$unserialized_source = unserialize(serialize($source));
+		$this->assertSame($rates, $unserialized_source->exchange_rates());
+	}
 }
