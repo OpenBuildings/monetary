@@ -19,6 +19,14 @@ class Monetary {
 
 	const DEFAULT_PRECISION = 2;
 
+	const POSITIVE = 'positive';
+
+	const NEGATIVE = 'negative';
+
+	const DEFAULT_POSITIVE_TEMPLATE_PREFIX = ':amount ';
+
+	const DEFAULT_NEGATIVE_TEMPLATE_PREFIX = '-:amount ';
+
 	/**
 	 * @var array of Monetary instances
 	 */
@@ -40,11 +48,30 @@ class Monetary {
 	 * @see OpenBuildings\Monetary\Monetary::currency_template
 	 */
 	public $currency_templates = array(
-		'USD' => '$:amount',
-		'EUR' => '€:amount',
-		'GBP' => '£:amount',
-		'BGN' => ':amount лв',
-		'JPY' => '¥:amount',
+		'USD' => array(
+			self::POSITIVE => '$:amount',
+			self::NEGATIVE => '-$:amount',
+		),
+		'EUR' => array(
+			self::POSITIVE => '€:amount',
+			self::NEGATIVE => '-€:amount',
+		),
+		'GBP' => array(
+			self::POSITIVE => '£:amount',
+			self::NEGATIVE => '-£:amount',
+		),
+		'BGN' => array(
+			self::POSITIVE => ':amount лв',
+			self::NEGATIVE => '-:amount лв',
+		),
+		'JPY' => array(
+			self::POSITIVE => '¥:amount',
+			self::NEGATIVE => '¥-:amount',
+		),
+		'DKK' => array(
+			self::POSITIVE => 'kr:amount',
+			self::NEGATIVE => 'kr-:amount',
+		)
 	);
 
 	/**
@@ -198,11 +225,12 @@ class Monetary {
 	public function format($amount, $currency = NULL, $precision = NULL)
 	{
 		$precision = $precision === NULL ? $this->precision() : $precision;
-		$amount = $this->round($amount, $precision);
 
 		$currency = $currency ?: $this->default_currency();
 
-		$template = $this->currency_template($currency);
+		$template = $this->currency_template($currency, $amount);
+
+		$amount = $this->round(abs($amount), $precision);
 
 		return preg_replace('/\:amount/u', $amount, $template);
 	}
@@ -239,10 +267,23 @@ class Monetary {
 	 * @param  string $currency currency code
 	 * @return string           template with ":amount" placeholder
 	 */
-	public function currency_template($currency)
+	public function currency_template($currency, $amount = NULL)
 	{
+		$sign = ($amount === NULL OR $amount >= 0)
+			? self::POSITIVE
+			: self::NEGATIVE;
+
 		return empty($this->currency_templates[$currency])
-			? ':amount '.$currency
-			: $this->currency_templates[$currency];
+			? $this->default_template($currency, $amount)
+			: (empty($this->currency_templates[$currency][$sign])
+				? $this->currency_templates[$currency]
+				: $this->currency_templates[$currency][$sign]);
+	}
+
+	public function default_template($currency, $amount = NULL)
+	{
+		return ($amount === NULL OR $amount >= 0)
+			? self::DEFAULT_POSITIVE_TEMPLATE_PREFIX.$currency
+			: self::DEFAULT_NEGATIVE_TEMPLATE_PREFIX.$currency;
 	}
 }

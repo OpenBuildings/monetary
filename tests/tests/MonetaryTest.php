@@ -59,12 +59,42 @@ class MonetaryTest extends Monetary_TestCase {
 			array(5.9764, 'GBP', 2, '£5.98'),
 			array(530.05, 'USD', 2, '$530.05'),
 			array(25.00,  'BGN', 2, '25.00 лв'),
+			array(25.00,  'JPY', 2, '¥25.00'),
+			array(25.00,  'DKK', 2, 'kr25.00'),
 			array(10,     NULL , 3, '$10.000'),
 			array(10,     'EUR', 3, '€10.000'),
 			array(5.97,   'GBP', 3, '£5.970'),
 			array(5.9764, 'GBP', 3, '£5.976'),
+			array(5.9764, 'JPY', 3, '¥5.976'),
+			array(5.9764, 'DKK', 3, 'kr5.976'),
 			array(530.05, 'USD', 3, '$530.050'),
 			array(25.00,  'BGN', 3, '25.000 лв'),
+			array(-10,     NULL , 2, '-$10.00'),
+			array(-10,     'EUR', 2, '-€10.00'),
+			array(-5.97,   'GBP', 2, '-£5.97'),
+			array(-5.9764, 'GBP', 2, '-£5.98'),
+			array(-530.05, 'USD', 2, '-$530.05'),
+			array(-25.00,  'BGN', 2, '-25.00 лв'),
+			array(-10,     NULL , 3, '-$10.000'),
+			array(-10,     'EUR', 3, '-€10.000'),
+			array(-5.97,   'GBP', 3, '-£5.970'),
+			array(-5.9764, 'GBP', 3, '-£5.976'),
+			array(-530.05, 'USD', 3, '-$530.050'),
+			array(-25.00,  'BGN', 3, '-25.000 лв'),
+			array(-5.97,   'JPY', 2, '¥-5.97'),
+			array(-5.9764, 'JPY', 2, '¥-5.98'),
+			array(-5.97,   'DKK', 2, 'kr-5.97'),
+			array(-5.9764, 'DKK', 2, 'kr-5.98'),
+			array(-530.05, 'USD', 2, '-$530.05'),
+			array(-25.00,  'BGN', 2, '-25.00 лв'),
+			array(-10,     NULL , 3, '-$10.000'),
+			array(-10,     'EUR', 3, '-€10.000'),
+			array(-5.97,   'GBP', 3, '-£5.970'),
+			array(-5.9764, 'GBP', 3, '-£5.976'),
+			array(-530.05, 'USD', 3, '-$530.050'),
+			array(-5.9764, 'JPY', 3, '¥-5.976'),
+			array(-530.05, 'DKK', 3, 'kr-530.050'),
+			array(-25.00,  'BGN', 3, '-25.000 лв'),
 		);
 	}
 
@@ -124,12 +154,34 @@ class MonetaryTest extends Monetary_TestCase {
 	public function data_currency_template()
 	{
 		return array(
-			array('USD', '$:amount'),
-			array('GBP', '£:amount'),
-			array('EUR', '€:amount'),
-			array('BGN', ':amount лв'),
-			array('JPY', '¥:amount'),
-			array('XXX', ':amount XXX'),
+			array('USD', NULL, '$:amount'),
+			array('GBP', NULL, '£:amount'),
+			array('EUR', NULL, '€:amount'),
+			array('BGN', NULL, ':amount лв'),
+			array('JPY', NULL, '¥:amount'),
+			array('DKK', NULL, 'kr:amount'),
+			array('XXX', NULL, ':amount XXX'),
+			array('USD', 50, '$:amount'),
+			array('GBP', 50, '£:amount'),
+			array('EUR', 50, '€:amount'),
+			array('BGN', 50, ':amount лв'),
+			array('JPY', 50, '¥:amount'),
+			array('DKK', 50, 'kr:amount'),
+			array('XXX', 50, ':amount XXX'),
+			array('USD', 0, '$:amount'),
+			array('GBP', 0, '£:amount'),
+			array('EUR', 0, '€:amount'),
+			array('BGN', 0, ':amount лв'),
+			array('JPY', 0, '¥:amount'),
+			array('DKK', 0, 'kr:amount'),
+			array('XXX', 0, ':amount XXX'),
+			array('USD', -50, '-$:amount'),
+			array('GBP', -50, '-£:amount'),
+			array('EUR', -50, '-€:amount'),
+			array('BGN', -50, '-:amount лв'),
+			array('JPY', -50, '¥-:amount'),
+			array('DKK', -50, 'kr-:amount'),
+			array('XXX', -50, '-:amount XXX'),
 		);
 	}
 
@@ -137,9 +189,12 @@ class MonetaryTest extends Monetary_TestCase {
 	 * @dataProvider data_currency_template
 	 * @covers OpenBuildings\Monetary\Monetary::currency_template
 	 */
-	public function test_currency_template($currency, $expected_template)
+	public function test_currency_template($currency, $amount, $expected_template)
 	{
-		$this->assertSame($expected_template, $this->monetary->currency_template($currency));
+		$this->assertSame(
+			$expected_template,
+			$this->monetary->currency_template($currency, $amount)
+		);
 	}
 
 	public function data_round()
@@ -186,6 +241,34 @@ class MonetaryTest extends Monetary_TestCase {
 	 */
 	public function test_round($amount, $precision, $expected_result)
 	{
-		$this->assertSame($expected_result, $this->monetary->round($amount, $precision));
+		$this->assertSame(
+			$expected_result,
+			$this->monetary->round($amount, $precision)
+		);
+	}
+
+	public function data_default_template()
+	{
+		return array(
+			array('USD', NULL, ':amount USD'),
+			array('EUR', NULL, ':amount EUR'),
+			array('EUR', 0, ':amount EUR'),
+			array('EUR', 55, ':amount EUR'),
+			array('EUR', 102.53, ':amount EUR'),
+			array('EUR', -102.53, '-:amount EUR'),
+			array('USD', -55, '-:amount USD'),
+		);
+	}
+
+	/**
+	 * @dataProvider data_default_template
+	 * @covers OpenBuildings\Monetary\Monetary::default_template
+	 */
+	public function test_default_template($currency, $amount, $expected_template)
+	{
+		$this->assertSame(
+			$expected_template,
+			$this->monetary->default_template($currency, $amount)
+		);
 	}
 }
