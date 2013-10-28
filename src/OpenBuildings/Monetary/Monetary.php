@@ -28,26 +28,11 @@ class Monetary {
 	const DEFAULT_NEGATIVE_TEMPLATE_PREFIX = '-:amount ';
 
 	/**
-	 * @var array of Monetary instances
-	 */
-	protected static $_instances = array();
-
-	public static function instance($group = self::DEFAULT_INSTANCE)
-	{
-		if (empty(self::$_instances[$group]))
-		{
-			self::$_instances[$group] = new static;
-		}
-
-		return self::$_instances[$group];
-	}
-
-	/**
 	 * Templates for formatting amounts in a given currency.
 	 * @var array Currency codes as keys and templates as values.
 	 * @see OpenBuildings\Monetary\Monetary::currency_template
 	 */
-	public $currency_templates = array(
+	public static $currency_templates = array(
 		'USD' => array(
 			self::POSITIVE => '$:amount',
 			self::NEGATIVE => '-$:amount',
@@ -73,6 +58,21 @@ class Monetary {
 			self::NEGATIVE => 'kr-:amount',
 		)
 	);
+
+	/**
+	 * @var array of Monetary instances
+	 */
+	protected static $_instances = array();
+
+	public static function instance($group = self::DEFAULT_INSTANCE)
+	{
+		if (empty(self::$_instances[$group]))
+		{
+			self::$_instances[$group] = new static;
+		}
+
+		return self::$_instances[$group];
+	}
 
 	/**
 	 * The default currency which will be used when no currency is provided.
@@ -273,11 +273,11 @@ class Monetary {
 			? self::POSITIVE
 			: self::NEGATIVE;
 
-		return empty($this->currency_templates[$currency])
+		return empty(self::$currency_templates[$currency])
 			? $this->default_template($currency, $amount)
-			: (empty($this->currency_templates[$currency][$sign])
-				? $this->currency_templates[$currency]
-				: $this->currency_templates[$currency][$sign]);
+			: (empty(self::$currency_templates[$currency][$sign])
+				? self::$currency_templates[$currency]
+				: self::$currency_templates[$currency][$sign]);
 	}
 
 	public function default_template($currency, $amount = NULL)
