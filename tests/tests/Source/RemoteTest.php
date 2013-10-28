@@ -279,6 +279,8 @@ class Source_RemoteTest extends TestCase {
 			->method('_converted_exchange_rates')
 			->will($this->returnValue($rates));
 
+		$source->cache(new Cache_None);
+
 		$unserialized_source = unserialize(serialize($source));
 		$this->assertSame($rates, $unserialized_source->exchange_rates());
 	}
