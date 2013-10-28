@@ -135,7 +135,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	}
 
 	/**
-	 * Perform a cURL request 
+	 * Perform a cURL request
 	 * @param  string $url          API endpoint
 	 * @param  array $curl_options  cURL options
 	 * @return string               raw response

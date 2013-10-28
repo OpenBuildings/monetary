@@ -3,7 +3,7 @@
 use OpenBuildings\Monetary as M;
 
 /**
- * 
+ *
  * @author Yasen Yanev <yasen@openbuildings.com>
  * @author Ivan Kerin <ivan@openbuildings.com>
  * @author Haralan Dobrev <hdobrev@despark.com>

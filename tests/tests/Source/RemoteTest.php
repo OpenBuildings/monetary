@@ -3,7 +3,7 @@
 use OpenBuildings\Monetary as M;
 
 /**
- * 
+ *
  * @author Yasen Yanev <yasen@openbuildings.com>
  * @author Ivan Kerin <ivan@openbuildings.com>
  * @author Haralan Dobrev <hdobrev@despark.com>
@@ -18,7 +18,7 @@ class Source_RemoteTest extends TestCase {
 	public function test_constructor()
 	{
 		$mock_cache = $this->getMock('OpenBuildings\Monetary\Cache');
-		
+
 		$remote = new M\Source_ECB($mock_cache);
 
 		$this->assertSame($mock_cache, $remote->cache());
@@ -93,7 +93,7 @@ class Source_RemoteTest extends TestCase {
 			'read_cache',
 			'write_cache'
 		));
-		
+
 		$cache_mock
 			->expects($this->at(0))
 			->method('read_cache')

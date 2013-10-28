@@ -42,7 +42,7 @@ class Cache implements Cacheable {
 
 		return $this->_cache;
 	}
-	
+
 	public function read_cache($cache_key)
 	{
 		return $this->cache_driver()->get($cache_key);
@@ -54,5 +54,5 @@ class Cache implements Cacheable {
 
 		return $this;
 	}
-	
+
 }

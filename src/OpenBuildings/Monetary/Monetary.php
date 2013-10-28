@@ -95,13 +95,13 @@ class Monetary {
 				$default_source = static::DEFAULT_SOURCE;
 				$this->_source = new $default_source;
 			}
-	
+
 			if ( ! $source)
 				return $this->_source;
 		} // @codeCoverageIgnore
 
 		$this->_source = $source;
-		
+
 		return $this;
 	}
 

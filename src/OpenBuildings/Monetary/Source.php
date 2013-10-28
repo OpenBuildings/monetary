@@ -22,7 +22,7 @@ abstract class Source implements Sourceable {
 
 		return (float) $to_rate / (float) $from_rate;
 	}
-	
+
 	public function serialize()
 	{
 		return serialize($this->exchange_rates());

@@ -62,7 +62,7 @@ class Source_Static extends Source {
 	{
 		$this->_static_exchange_rates = unserialize($data);
 	}
-	
+
 	public function exchange_rates()
 	{
 		return $this->_static_exchange_rates;

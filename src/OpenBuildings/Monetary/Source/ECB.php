@@ -38,9 +38,9 @@ class Source_ECB extends Source_Remote {
 		$data = $xml->xpath(self::XPATH_CURRENCY);
 		$currencies = array();
 
-		foreach ($data as $currency) 
-		{	
-			$currencies[ (string) $currency->attributes()->currency] = (string) $currency->attributes()->rate;	
+		foreach ($data as $currency)
+		{
+			$currencies[ (string) $currency->attributes()->currency] = (string) $currency->attributes()->rate;
 		}
 
 		return $currencies;
