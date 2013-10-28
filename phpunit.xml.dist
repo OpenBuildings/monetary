@@ -5,6 +5,9 @@
 		</testsuite>
 	</testsuites>
 	<filter>
+		<whitelist>
+			<directory>lib</directory>
+		</whitelist>
 		<blacklist>
 			<file>tests/bootstrap.php</file>
 			<directory suffix=".php">tests/classes/</directory>
@@ -14,6 +17,7 @@
 	<logging>
 		<log type="coverage-html" target="build/coverage" charset="UTF-8"
 		 logIncompleteSkipped="false" highlight="true"
-		 lowUpperBound="80" highLowerBound="90" showUncoveredFiles="true"/>
+		 lowUpperBound="80" highLowerBound="90" showUncoveredFiles="true"
+		 addUncoveredFilesFromWhitelist="true"/>
 	</logging>
 </phpunit>
