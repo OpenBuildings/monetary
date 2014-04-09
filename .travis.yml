@@ -5,16 +5,21 @@ php:
   - 5.4
   - 5.5
 
-#whitelist
-branches:
-  only:
-    - master
-    - /^feature-.*$/
+notifications:
+  email: false
+  slack:
+    secure: ZQGUEu+N9otf3DhMJ1Qmn/oY0kSRylNRgqRcXcrBTs12ZUBPI7k4MVsNQCXAn7+mFSccPxhjnAjdj/bzISc0ngwEYqMiNX3xDimuFP7BwUnQIjsftDSDAQnt7kZy29eVd9kojPiwcYOxT8hPKEk8znXIvGgbfbY3ie9zT8CT/VY=
 
-script: vendor/bin/phpunit --no-configuration --bootstrap tests/bootstrap.php --coverage-clover build/logs/clover.xml tests/tests
+install:
+  - composer selfupdate
+  - composer install --no-interaction
 
 before_script:
   - mkdir -p build/logs
-  - composer require --dev satooshi/php-coveralls:0.6.*
 
-after_script: php vendor/bin/coveralls -v
+script:
+  - phpunit --coverage-clover build/logs/clover.xml
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
