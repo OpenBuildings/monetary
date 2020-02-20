@@ -1,5 +1,6 @@
 <?php
 
+use Desarrolla2\Cache\Cache;
 use OpenBuildings\Monetary as M;
 use Desarrolla2\Cache as DCache;
 
@@ -9,12 +10,12 @@ use Desarrolla2\Cache as DCache;
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-class Monetary_CacheTest extends PHPUnit_Framework_TestCase {
+class Monetary_CacheTest extends \PHPUnit\Framework\TestCase {
 
 	public function test_cacheable()
 	{
 		$cache = new M\Cache;
-		$this->assertInstanceOf('OpenBuildings\Monetary\Cacheable', $cache);
+		$this->assertInstanceOf(M\Cacheable::class, $cache);
 	}
 
 	/**
@@ -24,7 +25,7 @@ class Monetary_CacheTest extends PHPUnit_Framework_TestCase {
 	{
 		$cache = new M\Cache;
 		$cache_driver = $cache->cache_driver();
-		$this->assertInstanceOf('Desarrolla2\Cache\Cache', $cache_driver);
+		$this->assertInstanceOf(Cache::class, $cache_driver);
 
 		$this->assertSame($cache_driver, $cache->cache_driver());
 	}
@@ -36,9 +37,15 @@ class Monetary_CacheTest extends PHPUnit_Framework_TestCase {
 	{
 		$cache_key = 'some-cache-key';
 
-		$cache_driver_mock = $this->getMock('Desarrolla2\Cache\Cache', array('get'));
+        $cache_driver_mock = $this
+            ->getMockBuilder(Cache::class)
+            ->setMethods(['get'])
+            ->getMock();
 
-		$cache_mock = $this->getMock('OpenBuildings\Monetary\Cache', array('cache_driver'));
+        $cache_mock = $this
+            ->getMockBuilder(M\Cache::class)
+            ->setMethods(['cache_driver'])
+            ->getMock();
 
 		$cache_mock
 			->expects($this->once())
@@ -61,9 +68,15 @@ class Monetary_CacheTest extends PHPUnit_Framework_TestCase {
 		$cache_key = 'some-cache-key';
 		$data = 'some-cache-data';
 
-		$cache_driver_mock = $this->getMock('Desarrolla2\Cache\Cache', array('set'));
+        $cache_driver_mock = $this
+            ->getMockBuilder(Cache::class)
+            ->setMethods(['set'])
+            ->getMock();
 
-		$cache_mock = $this->getMock('OpenBuildings\Monetary\Cache', array('cache_driver'));
+        $cache_mock = $this
+            ->getMockBuilder(M\Cache::class)
+            ->setMethods(['cache_driver'])
+            ->getMock();
 
 		$cache_mock
 			->expects($this->once())

@@ -7,7 +7,7 @@ use OpenBuildings\Monetary as M;
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-class Monetary_InstanceTest extends PHPUnit_Framework_TestCase {
+class Monetary_InstanceTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers OpenBuildings\Monetary\Monetary::instance

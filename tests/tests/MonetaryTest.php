@@ -24,7 +24,7 @@ class MonetaryTest extends Monetary_TestCase {
 		);
 
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\Source_Ecb',
+			M\Source_ECB::class,
 			$monetary->source()
 		);
 
@@ -43,7 +43,7 @@ class MonetaryTest extends Monetary_TestCase {
 		$this->assertEquals('EUR',$monetary->default_currency());
 
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\Source_Static',
+			M\Source_Static::class,
 			$monetary->source()
 		);
 
@@ -142,13 +142,13 @@ class MonetaryTest extends Monetary_TestCase {
 	{
 		$monetary = new M\Monetary;
 
-		$this->assertInstanceOf('OpenBuildings\Monetary\Sourceable', $monetary->source());
-		$this->assertInstanceOf('OpenBuildings\Monetary\Source_ECB', $monetary->source());
+		$this->assertInstanceOf(M\Sourceable::class, $monetary->source());
+		$this->assertInstanceOf(M\Source_ECB::class, $monetary->source());
 
 		$source = new M\Source_Static;
 		$monetary->source($source);
-		$this->assertInstanceOf('OpenBuildings\Monetary\Sourceable', $monetary->source());
-		$this->assertInstanceOf('OpenBuildings\Monetary\Source_Static', $monetary->source());
+		$this->assertInstanceOf(M\Sourceable::class, $monetary->source());
+		$this->assertInstanceOf(M\Source_Static::class, $monetary->source());
 	}
 
 	public function data_currency_template()

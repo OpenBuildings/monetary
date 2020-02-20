@@ -1,6 +1,8 @@
 <?php
 
-use OpenBuildings\Monetary\CURL as CURL;
+use OpenBuildings\Monetary\CURL;
+use OpenBuildings\Monetary\Exception_Source;
+use PHPUnit\Framework\Error\Warning;
 
 /**
  * Test OpenBuildings\Monetary\CURL class.
@@ -8,18 +10,17 @@ use OpenBuildings\Monetary\CURL as CURL;
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-class CURLTest extends PHPUnit_Framework_TestCase {
+class CURLTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers OpenBuildings\Monetary\CURL::request
 	 */
 	public function test_request()
 	{
-		$curl = $this->getMock('OpenBuildings\Monetary\CURL', array(
-			'_init',
-			'_execute',
-			'_close',
-		));
+        $curl = $this
+            ->getMockBuilder(CURL::class)
+            ->setMethods(['_init', '_execute', '_close'])
+            ->getMock();
 
 		$curl
 			->expects($this->once())
@@ -52,12 +53,10 @@ class CURLTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function test_request_with_error()
 	{
-		$curl = $this->getMock('OpenBuildings\Monetary\CURL', array(
-			'_init',
-			'_execute',
-			'_handle_error',
-			'_close',
-		));
+        $curl = $this
+            ->getMockBuilder(CURL::class)
+            ->setMethods(['_init', '_execute', '_handle_error', '_close'])
+            ->getMock();
 
 		$curl
 			->expects($this->once())
@@ -91,11 +90,10 @@ class CURLTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function test_handle_error()
 	{
-		$curl = $this->getMock('OpenBuildings\Monetary\CURL', array(
-			'_init',
-			'_execute',
-			'_close',
-		));
+        $curl = $this
+            ->getMockBuilder(CURL::class)
+            ->setMethods(['_init', '_execute', '_close'])
+            ->getMock();
 
 		$resource = curl_init();
 
@@ -118,10 +116,8 @@ class CURLTest extends PHPUnit_Framework_TestCase {
 			->method('_close')
 			->with($this->equalTo($resource));
 
-		$this->setExpectedException(
-			'OpenBuildings\Monetary\Exception_Source',
-			'Fetching remote data failed:  (0)'
-		);
+		$this->expectException(Exception_Source::class);
+		$this->expectExceptionMessage('Fetching remote data failed:  (0)');
 
 		$curl->request(array(
 			'ABCDE' => 'QWERTY'
@@ -135,10 +131,10 @@ class CURLTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function test_close()
 	{
-		$curl = $this->getMock('OpenBuildings\Monetary\CURL', array(
-			'_init',
-			'_execute',
-		));
+        $curl = $this
+            ->getMockBuilder(CURL::class)
+            ->setMethods(['_init', '_execute'])
+            ->getMock();
 
 		$resource = curl_init();
 
@@ -160,7 +156,7 @@ class CURLTest extends PHPUnit_Framework_TestCase {
 			'ABCDE' => 'QWERTY'
 		));
 
-		$this->setExpectedException('PHPUnit_Framework_Error_Warning');
+		$this->expectException(Warning::class);
 
 		curl_close($resource);
 	}

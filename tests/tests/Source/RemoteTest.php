@@ -17,7 +17,9 @@ class Source_RemoteTest extends TestCase {
 	 */
 	public function test_constructor()
 	{
-		$mock_cache = $this->getMock('OpenBuildings\Monetary\Cache');
+        $mock_cache = $this
+            ->getMockBuilder(M\Cache::class)
+            ->getMock();
 
 		$remote = new M\Source_ECB($mock_cache);
 
@@ -32,22 +34,24 @@ class Source_RemoteTest extends TestCase {
 		$remote = new M\Source_ECB;
 
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\Cacheable',
+			M\Cacheable::class,
 			$remote->cache()
 		);
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\Cache',
+			M\Cache::class,
 			$remote->cache()
 		);
 
-		$mock_cache = $this->getMock('OpenBuildings\Monetary\Cache');
+        $mock_cache = $this
+            ->getMockBuilder(M\Cache::class)
+            ->getMock();
 		$remote->cache($mock_cache);
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\Cacheable',
+			M\Cacheable::class,
 			$remote->cache()
 		);
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\Cache',
+			M\Cache::class,
 			$remote->cache()
 		);
 
@@ -62,22 +66,24 @@ class Source_RemoteTest extends TestCase {
 		$remote = new M\Source_ECB;
 
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\Requestable',
+			M\Requestable::class,
 			$remote->request_driver()
 		);
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\CURL',
+			M\CURL::class,
 			$remote->request_driver()
 		);
 
-		$mock_request_driver = $this->getMock('OpenBuildings\Monetary\CURL');
+        $mock_request_driver = $this
+            ->getMockBuilder(M\CURL::class)
+            ->getMock();
 		$remote->request_driver($mock_request_driver);
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\Requestable',
+			M\Requestable::class,
 			$remote->request_driver()
 		);
 		$this->assertInstanceOf(
-			'OpenBuildings\Monetary\CURL',
+			M\CURL::class,
 			$remote->request_driver()
 		);
 
@@ -89,10 +95,10 @@ class Source_RemoteTest extends TestCase {
 	 */
 	public function test_exchange_rates()
 	{
-		$cache_mock = $this->getMock('OpenBuildings\Monetary\Cache', array(
-			'read_cache',
-			'write_cache'
-		));
+        $cache_mock = $this
+            ->getMockBuilder(M\Cache::class)
+            ->setMethods(['read_cache', 'write_cache'])
+            ->getMock();
 
 		$cache_mock
 			->expects($this->at(0))
@@ -114,9 +120,10 @@ class Source_RemoteTest extends TestCase {
 				$this->equalTo('ABCDE')
 			);
 
-		$remote = $this->getMock('OpenBuildings\Monetary\Source_ECB', array(
-			'_converted_exchange_rates'
-		));
+        $remote = $this
+            ->getMockBuilder(M\Source_ECB::class)
+            ->setMethods(['_converted_exchange_rates'])
+            ->getMock();
 
 		$remote
 			->expects($this->any())
@@ -128,9 +135,10 @@ class Source_RemoteTest extends TestCase {
 		$exchange_rates = $remote->exchange_rates();
 		$this->assertSame('ABCDE', $exchange_rates);
 
-		$remote = $this->getMock('OpenBuildings\Monetary\Source_ECB', array(
-			'_converted_exchange_rates'
-		));
+        $remote = $this
+            ->getMockBuilder(M\Source_ECB::class)
+            ->setMethods(['_converted_exchange_rates'])
+            ->getMock();
 
 		$remote
 			->expects($this->exactly(0))
@@ -146,10 +154,10 @@ class Source_RemoteTest extends TestCase {
 	 */
 	public function test_converted_exchange_rates()
 	{
-		$cache_mock = $this->getMock('OpenBuildings\Monetary\Cache', array(
-			'read_cache',
-			'write_cache'
-		));
+        $cache_mock = $this
+            ->getMockBuilder(M\Cache::class)
+            ->setMethods(['read_cache', 'write_cache'])
+            ->getMock();
 
 		$cache_mock
 			->expects($this->any())
@@ -160,10 +168,10 @@ class Source_RemoteTest extends TestCase {
 			->expects($this->any())
 			->method('write_cache');
 
-		$remote = $this->getMock('OpenBuildings\Monetary\Source_ECB', array(
-			'fetch_remote_data',
-			'convert_to_array'
-		));
+        $remote = $this
+            ->getMockBuilder(M\Source_ECB::class)
+            ->setMethods(['fetch_remote_data', 'convert_to_array'])
+            ->getMock();
 
 		$remote
 			->expects($this->at(0))
@@ -195,10 +203,10 @@ class Source_RemoteTest extends TestCase {
 	 */
 	public function test_request()
 	{
-		$cache_mock = $this->getMock('OpenBuildings\Monetary\Cache', array(
-			'read_cache',
-			'write_cache'
-		));
+        $cache_mock = $this
+            ->getMockBuilder(M\Cache::class)
+            ->setMethods(['read_cache', 'write_cache'])
+            ->getMock();
 
 		$cache_mock
 			->expects($this->any())
@@ -209,9 +217,10 @@ class Source_RemoteTest extends TestCase {
 			->expects($this->any())
 			->method('write_cache');
 
-		$request_mock = $this->getMock('OpenBuildings\Monetary\CURL', array(
-			'request'
-		));
+        $request_mock = $this
+            ->getMockBuilder(M\CURL::class)
+            ->setMethods(['request'])
+            ->getMock();
 
 		$request_mock
 			->expects($this->once())
@@ -270,9 +279,10 @@ class Source_RemoteTest extends TestCase {
 	public function test_serialize()
 	{
 		$rates = array('XXX' => '12.5');
-		$source = $this->getMock('OpenBuildings\Monetary\Source_ECB', array(
-			'_converted_exchange_rates'
-		));
+        $source = $this
+            ->getMockBuilder(M\Source_ECB::class)
+            ->setMethods(['_converted_exchange_rates'])
+            ->getMock();
 
 		$source
 			->expects($this->once())

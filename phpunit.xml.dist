@@ -1,23 +1,20 @@
 <phpunit colors="true" bootstrap="tests/bootstrap.php">
 	<testsuites>
-		<testsuite>
-			<directory>tests/tests</directory>
+		<testsuite name="RootTestSuite">
+			<directory suffix="Test.php">tests</directory>
 		</testsuite>
 	</testsuites>
 	<filter>
 		<whitelist>
-			<directory>lib</directory>
+			<directory suffix=".php">src</directory>
 		</whitelist>
-		<blacklist>
-			<file>tests/bootstrap.php</file>
-			<directory suffix=".php">tests/classes/</directory>
-			<directory suffix=".php">vendor/</directory>
-		</blacklist>
 	</filter>
 	<logging>
-		<log type="coverage-html" target="build/coverage" charset="UTF-8"
-		 logIncompleteSkipped="false" highlight="true"
-		 lowUpperBound="80" highLowerBound="90" showUncoveredFiles="true"
-		 addUncoveredFilesFromWhitelist="true"/>
+		<log type="coverage-html"
+			 target="build/coverage"
+			 lowUpperBound="80"
+			 highLowerBound="90"
+			 showUncoveredFiles="true"
+		/>
 	</logging>
 </phpunit>
