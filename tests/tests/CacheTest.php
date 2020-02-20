@@ -2,7 +2,6 @@
 
 use Desarrolla2\Cache\Cache;
 use OpenBuildings\Monetary as M;
-use Desarrolla2\Cache as DCache;
 
 /**
  * Test OpenBuildings\Monetary\Cache class.

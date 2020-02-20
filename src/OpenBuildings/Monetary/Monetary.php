@@ -30,7 +30,7 @@ class Monetary {
 	/**
 	 * Templates for formatting amounts in a given currency.
 	 * @var array Currency codes as keys and templates as values.
-	 * @see OpenBuildings\Monetary\Monetary::currency_template
+	 * @see Monetary::currency_template
 	 */
 	public static $currency_templates = array(
 		'USD' => array(
@@ -184,7 +184,7 @@ class Monetary {
 	 * @param  string $from  Currency of the amount. If NULL, default is used.
 	 * @param  string $to    Desired currency. If NULL, default is used.
 	 * @return float         Amount converted in the desired currency.
-	 * @uses OpenBuildings\Monetary\Monetary::exchange_rate
+	 * @uses \OpenBuildings\Monetary\Monetary::exchange_rate
 	 */
 	public function convert($value, $from = NULL, $to = NULL)
 	{
@@ -199,7 +199,7 @@ class Monetary {
 	 * @param  string $from Source currency code. If NULL, default is used.
 	 * @param  string $to   Target currency code. If NULL, default is used.
 	 * @return float        Exchange rate
-	 * @uses OpenBuildings\Monetary\Monetary::exchange_rates
+	 * @uses \OpenBuildings\Monetary\Monetary::exchange_rates
 	 */
 	public function exchange_rate($from = NULL, $to = NULL)
 	{
@@ -218,9 +218,9 @@ class Monetary {
 	 * @param  string  $currency
 	 * @param  integer $precision
 	 * @return string formatted amount with a currency sign
-	 * @uses OpenBuildings\Monetary\Monetary::round for rounding the amount
-	 * @uses OpenBuildings\Monetary\Monetary::precision for default precision
-	 * @uses OpenBuildings\Monetary\Monetary::currency_template for the template
+	 * @uses \OpenBuildings\Monetary\Monetary::round for rounding the amount
+	 * @uses \OpenBuildings\Monetary\Monetary::precision for default precision
+	 * @uses \OpenBuildings\Monetary\Monetary::currency_template for the template
 	 */
 	public function format($amount, $currency = NULL, $precision = NULL)
 	{
@@ -232,7 +232,7 @@ class Monetary {
 
 		$amount = $this->round(abs($amount), $precision);
 
-		return preg_replace('/\:amount/u', $amount, $template);
+		return preg_replace('/:amount/u', $amount, $template);
 	}
 
 	/**
@@ -251,9 +251,9 @@ class Monetary {
 	 * @param  float $amount  Amount to be converted and formatted
 	 * @param  string $from   Currency of the amount. If NULL, default is used.
 	 * @param  string $to     Desired currency. If Null, default is used.
-	 * @return strgin         Formatted and converted amount.
-	 * @uses OpenBuildings\Monetary\Monetary::format for the formatting
-	 * @uses OpenBuildings\Monetary\Monetary::convert for the conversion
+	 * @return string
+	 * @uses \OpenBuildings\Monetary\Monetary::format for the formatting
+	 * @uses \OpenBuildings\Monetary\Monetary::convert for the conversion
 	 */
 	public function convert_and_format($amount, $from = NULL, $to = NULL)
 	{

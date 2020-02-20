@@ -21,13 +21,13 @@ class Cache implements Cacheable {
 	const CACHE_DIR = 'cache';
 
 	/**
-	 * @var Desarrolla2\Cache\Cache
+	 * @var DCache\Cache
 	 */
 	protected $_cache;
 
 	/**
 	 * Get an instance of the cache helper
-	 * @return Desarrolla2\Cache\Cache
+	 * @return DCache\Cache
 	 */
 	public function cache_driver()
 	{

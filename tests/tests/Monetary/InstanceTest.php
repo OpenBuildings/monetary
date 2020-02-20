@@ -33,7 +33,7 @@ class Monetary_InstanceTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function test_same_instance_with_source()
 	{
-		$monetary = M\Monetary::instance('same_instance_with_source', new M\Source_Static);
+		$monetary = M\Monetary::instance('same_instance_with_source');
 		$this->assertSame($monetary, M\Monetary::instance('same_instance_with_source'));
 	}
 

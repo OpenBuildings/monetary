@@ -2,13 +2,15 @@
 
 namespace OpenBuildings\Monetary;
 
+use Serializable;
+
 /**
  * Source of currency exchange rates.
  * @author Haralan Dobrev <hdobrev@despark.com>
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-interface Sourceable extends \Serializable {
+interface Sourceable extends Serializable {
 
 	/**
 	 * Get exchange rate between two currencies
