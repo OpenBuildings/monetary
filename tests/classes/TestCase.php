@@ -8,7 +8,7 @@
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-class TestCase extends PHPUnit_Framework_TestCase {
+class TestCase extends \PHPUnit\Framework\TestCase {
 
 	const ECB_XML_DATA = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>

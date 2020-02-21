@@ -2,6 +2,8 @@
 
 namespace OpenBuildings\Monetary;
 
+use SimpleXMLElement;
+
 /**
  * Fetch exchange rates from European Central Bank
  * @author Yasen Yanev <yasen@openbuildings.com>
@@ -29,7 +31,7 @@ class Source_ECB extends Source_Remote {
 	 */
 	public function convert_to_array($raw_data)
 	{
-		$xml = new \SimpleXMLElement($raw_data);
+		$xml = new SimpleXMLElement($raw_data);
 		$xml->registerXPathNamespace(
 			self::XML_NAMESPACE,
 			self::XML_NAMESPACE_URL

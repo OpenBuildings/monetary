@@ -10,12 +10,12 @@ use OpenBuildings\Monetary as M;
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-class SourceTest extends PHPUnit_Framework_TestCase {
+class SourceTest extends \PHPUnit\Framework\TestCase {
 
 	public function test_sourceable()
 	{
 		$cache = new M\Source_Static;
-		$this->assertInstanceOf('OpenBuildings\Monetary\Sourceable', $cache);
+		$this->assertInstanceOf(M\Sourceable::class, $cache);
 	}
 
 	/**
@@ -23,9 +23,10 @@ class SourceTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function test_rate_without_currency_data()
 	{
-		$source = $this->getMock('OpenBuildings\Monetary\Source_Static', array(
-			'exchange_rates'
-		));
+        $source = $this
+            ->getMockBuilder(M\Source_Static::class)
+            ->setMethods(['exchange_rates'])
+            ->getMock();
 
 		$source
 			->expects($this->once())

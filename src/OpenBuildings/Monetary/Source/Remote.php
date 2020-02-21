@@ -27,12 +27,12 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	protected $_exchange_rates;
 
 	/**
-	 * @var OpenBuildings\Monetary\Requestable
+	 * @var Requestable
 	 */
 	protected $_request_driver;
 
 	/**
-	 * @var OpenBuildings\Monetary\Cacheable
+	 * @var Source_Cacheable
 	 */
 	protected $_cache;
 
@@ -68,7 +68,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 
 	/**
 	 * Get an instance of the cache driver
-	 * @return OpenBuildings\Monetary\Cacheable
+	 * @return Source_Cacheable
 	 */
 	public function cache(Cacheable $cache = NULL)
 	{
@@ -91,7 +91,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 
 	/**
 	 * Get an instance of the request driver
-	 * @return OpenBuildings\Monetary\Requestable
+	 * @return Requestable
 	 */
 	public function request_driver(Requestable $request_driver = NULL)
 	{
@@ -139,7 +139,7 @@ abstract class Source_Remote extends Source implements Source_Cacheable {
 	 * @param  string $url          API endpoint
 	 * @param  array $curl_options  cURL options
 	 * @return string               raw response
-	 * @uses OpenBuildings\Monetary\CURL::request for the actual cURL request
+	 * @uses \OpenBuildings\Monetary\CURL::request for the actual cURL request
 	 */
 	protected function _request($url, array $curl_options = NULL)
 	{

@@ -61,7 +61,10 @@ class Source_ECBTest extends TestCase {
 	 */
 	public function test_fetch_remote_data()
 	{
-		$ecb_mock = $this->getMock('OpenBuildings\Monetary\Source_ECB', array('_request'));
+        $ecb_mock = $this
+            ->getMockBuilder(M\Source_ECB::class)
+            ->setMethods(['_request'])
+            ->getMock();
 
 		$ecb_mock
 			->expects($this->once())

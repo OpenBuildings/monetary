@@ -8,7 +8,7 @@ use OpenBuildings\Monetary\Exception as Exception;
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-class ExceptionTest extends PHPUnit_Framework_TestCase {
+class ExceptionTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers OpenBuildings\Monetary\Exception::__construct

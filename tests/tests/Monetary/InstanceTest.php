@@ -7,7 +7,7 @@ use OpenBuildings\Monetary as M;
  * @copyright (c) 2013 OpenBuildings Inc.
  * @license http://spdx.org/licenses/BSD-3-Clause
  */
-class Monetary_InstanceTest extends PHPUnit_Framework_TestCase {
+class Monetary_InstanceTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @covers OpenBuildings\Monetary\Monetary::instance
@@ -33,7 +33,7 @@ class Monetary_InstanceTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function test_same_instance_with_source()
 	{
-		$monetary = M\Monetary::instance('same_instance_with_source', new M\Source_Static);
+		$monetary = M\Monetary::instance('same_instance_with_source');
 		$this->assertSame($monetary, M\Monetary::instance('same_instance_with_source'));
 	}
 
